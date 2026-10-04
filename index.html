@@ -3,101 +3,198 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Easy Paid – Private Beta 7.092 (Staging)</title>
+  <title>Easy Paid – Private Beta 7.100</title>
+  <meta name="description" content="Private exclusive Sharia-compliant fintech wallet. Zero riba. Easiest convert flow." />
   <style>
     :root {
       --primary: #0f4c81;
       --accent: #1a7a4c;
-      --bg: #f7f9fc;
+      --bg: #f0f4f8;
+      --card: #ffffff;
       --text: #1a1a1a;
       --muted: #5a6a7a;
+      --border: #e2e8f0;
+      --fee: #b45309;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.6;
+      line-height: 1.5;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
+      padding: 1.25rem;
     }
-    .card {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 8px 30px rgba(15, 76, 129, 0.08);
-      max-width: 560px;
-      width: 100%;
-      padding: 2.5rem;
-      text-align: center;
-    }
+    .wrap { max-width: 420px; margin: 0 auto; }
+    header { text-align: center; padding: 1.5rem 0 1rem; }
     .badge {
-      display: inline-block;
-      background: var(--accent);
-      color: white;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      padding: 0.25rem 0.75rem;
-      border-radius: 999px;
-      margin-bottom: 1rem;
+      display: inline-block; background: var(--accent); color: #fff;
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em;
+      padding: 0.2rem 0.65rem; border-radius: 999px; margin-bottom: 0.6rem;
     }
-    h1 {
-      font-size: 1.95rem;
-      color: var(--primary);
-      margin-bottom: 0.35rem;
+    h1 { font-size: 1.75rem; color: var(--primary); }
+    .ver { color: var(--muted); font-size: 0.85rem; margin-top: 0.2rem; }
+    .balance-card {
+      background: linear-gradient(135deg, #0f4c81, #1a6a9a); color: #fff;
+      border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem;
+      box-shadow: 0 8px 24px rgba(15,76,129,0.25);
     }
-    .version {
-      color: var(--muted);
-      font-size: 0.95rem;
-      margin-bottom: 1.5rem;
+    .balance-label { font-size: 0.8rem; opacity: 0.85; }
+    .balance-amount { font-size: 2rem; font-weight: 700; margin: 0.25rem 0; }
+    .balance-sub { font-size: 0.8rem; opacity: 0.8; }
+    .btn-primary {
+      display: block; width: 100%; background: var(--accent); color: #fff;
+      border: none; border-radius: 12px; padding: 0.9rem; font-size: 1rem;
+      font-weight: 600; cursor: pointer; margin-top: 1rem;
     }
-    p {
-      color: var(--muted);
-      margin-bottom: 1rem;
-      font-size: 0.98rem;
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .section {
+      background: var(--card); border-radius: 14px; padding: 1.15rem;
+      margin-bottom: 0.85rem; box-shadow: 0 2px 10px rgba(0,0,0,0.04);
     }
-    .features {
-      text-align: left;
-      margin: 1.5rem 0;
-      padding: 1rem 1.25rem;
-      background: #f0f5fa;
-      border-radius: 10px;
-      font-size: 0.9rem;
+    .section h2 { font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--primary); }
+    .method-grid { display: grid; gap: 0.55rem; }
+    .method {
+      border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 0.75rem 0.9rem; cursor: pointer; display: flex;
+      align-items: center; gap: 0.65rem;
     }
-    .features li { margin: 0.35rem 0; }
-    .note {
-      font-size: 0.82rem;
-      color: var(--muted);
-      margin-top: 1.5rem;
-      border-top: 1px solid #e5eaf0;
-      padding-top: 1rem;
+    .method.selected, .method:hover { border-color: var(--primary); background: #f0f7fc; }
+    .method .label { font-weight: 600; font-size: 0.9rem; }
+    .method .sub { font-size: 0.75rem; color: var(--muted); }
+    .recommended {
+      margin-left: auto; font-size: 0.65rem; background: #dcfce7;
+      color: #166534; padding: 0.15rem 0.4rem; border-radius: 4px; font-weight: 600;
     }
-    strong { color: var(--primary); }
+    .amount-row { margin-top: 0.75rem; }
+    .amount-row input {
+      width: 100%; border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 0.7rem 0.85rem; font-size: 1rem;
+    }
+    .fee-preview {
+      margin-top: 0.75rem; padding: 0.7rem 0.85rem; background: #fffbeb;
+      border-radius: 8px; font-size: 0.85rem; display: none;
+    }
+    .fee-preview.visible { display: block; }
+    .fee-preview .row { display: flex; justify-content: space-between; margin: 0.2rem 0; }
+    .fee-preview .fee { color: var(--fee); }
+    .fee-preview .receive { font-weight: 700; color: var(--accent); }
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; margin-top: 0.75rem; }
+    .btn-secondary {
+      background: #fff; border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 0.7rem; font-size: 0.9rem; font-weight: 600; cursor: pointer; color: var(--primary);
+    }
+    .tx { display: flex; justify-content: space-between; padding: 0.55rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    .tx .in { color: var(--accent); font-weight: 600; }
+    .tx .meta { color: var(--muted); font-size: 0.75rem; }
+    .note { text-align: center; font-size: 0.75rem; color: var(--muted); margin-top: 1.25rem; padding-bottom: 1.5rem; }
+    .toast {
+      position: fixed; bottom: 1.25rem; left: 50%; transform: translateX(-50%);
+      background: #1a1a1a; color: #fff; padding: 0.65rem 1.1rem; border-radius: 999px;
+      font-size: 0.85rem; opacity: 0; transition: opacity 0.25s; z-index: 50;
+    }
+    .toast.show { opacity: 1; }
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="badge">PRIVATE BETA</div>
-    <h1>Easy Paid</h1>
-    <div class="version">Version <strong>7.092</strong> · Staging</div>
-    <p>
-      Private exclusive Sharia-compliant fintech wallet<br>
-      for Mobile + Web.
-    </p>
-    <ul class="features">
-      <li>Zero riba / sood / interest — fee-based only</li>
-      <li>Easiest Convert flow (JazzCash / EasyPaisa / Bank / Crypto)</li>
-      <li>Phone OTP · Peer send & request · Clear fee preview</li>
-      <li>Invitation-only · Full audit trail</li>
-    </ul>
-    <p class="note">
-      Temporary staging presence while <strong>uplinkserve.com</strong> is prepared.<br>
-      Contact: Uxman ASHSHAHEED · +92 300 0125997
-    </p>
+  <div class="wrap">
+    <header>
+      <div class="badge">PRIVATE BETA</div>
+      <h1>Easy Paid</h1>
+      <div class="ver">Version <strong>7.100</strong> · Staging demo</div>
+    </header>
+    <div class="balance-card">
+      <div class="balance-label">Available balance</div>
+      <div class="balance-amount" id="bal">PKR 0.00</div>
+      <div class="balance-sub">Fee-based only · Zero riba / sood / interest</div>
+      <button class="btn-primary" onclick="showConvert()">Add Money</button>
+    </div>
+    <div class="section" id="convertPanel" style="display:none">
+      <h2>Add Money · Easiest Convert</h2>
+      <div class="method-grid">
+        <div class="method selected" data-method="local" onclick="selectMethod(this)">
+          <div><div class="label">Local</div><div class="sub">JazzCash · EasyPaisa · Bank</div></div>
+          <span class="recommended">Recommended</span>
+        </div>
+        <div class="method" data-method="fiat" onclick="selectMethod(this)">
+          <div><div class="label">Bank / One-time Fiat</div><div class="sub">Direct transfer</div></div>
+        </div>
+        <div class="method" data-method="crypto" onclick="selectMethod(this)">
+          <div><div class="label">Crypto</div><div class="sub">BTC · USDT</div></div>
+        </div>
+      </div>
+      <div class="amount-row">
+        <input type="number" id="amount" placeholder="Amount (PKR)" min="1" oninput="updateFee()" />
+      </div>
+      <div class="fee-preview" id="feePreview">
+        <div class="row"><span>You pay</span><span id="payAmt">—</span></div>
+        <div class="row fee"><span>Service fee (1.5%)</span><span id="feeAmt">—</span></div>
+        <div class="row receive"><span>You receive</span><span id="recvAmt">—</span></div>
+      </div>
+      <button class="btn-primary" id="btnConfirm" disabled onclick="confirmAdd()" style="margin-top:0.85rem">Confirm (demo)</button>
+      <p style="font-size:0.72rem;color:var(--muted);margin-top:0.5rem;text-align:center">Demo only · No real money · Transparent fee only</p>
+    </div>
+    <div class="actions">
+      <button class="btn-secondary" onclick="toast('Send — next build')">Send</button>
+      <button class="btn-secondary" onclick="toast('Request — next build')">Request</button>
+    </div>
+    <div class="section" style="margin-top:0.85rem">
+      <h2>Recent (demo)</h2>
+      <div id="history">
+        <div class="tx"><div><div>Welcome credit</div><div class="meta">Demo ledger · fee PKR 0</div></div><div class="in">+0.00</div></div>
+      </div>
+    </div>
+    <p class="note">Sharia-compliant · Invitation-only<br>Staging while <strong>uplinkserve.com</strong> is prepared<br>Contact: Uxman ASHSHAHEED · +92 300 0125997</p>
   </div>
+  <div class="toast" id="toast"></div>
+  <script>
+    let method = 'local', balance = 0;
+    const FEE_RATE = 0.015;
+    function showConvert() {
+      const p = document.getElementById('convertPanel');
+      p.style.display = p.style.display === 'none' ? 'block' : 'none';
+    }
+    function selectMethod(el) {
+      document.querySelectorAll('.method').forEach(m => m.classList.remove('selected'));
+      el.classList.add('selected');
+      method = el.dataset.method;
+      updateFee();
+    }
+    function updateFee() {
+      const raw = parseFloat(document.getElementById('amount').value) || 0;
+      const prev = document.getElementById('feePreview');
+      const btn = document.getElementById('btnConfirm');
+      if (raw <= 0) { prev.classList.remove('visible'); btn.disabled = true; return; }
+      const fee = Math.round(raw * FEE_RATE * 100) / 100;
+      const recv = Math.round((raw - fee) * 100) / 100;
+      document.getElementById('payAmt').textContent = 'PKR ' + raw.toFixed(2);
+      document.getElementById('feeAmt').textContent = 'PKR ' + fee.toFixed(2);
+      document.getElementById('recvAmt').textContent = 'PKR ' + recv.toFixed(2);
+      prev.classList.add('visible');
+      btn.disabled = false;
+    }
+    function confirmAdd() {
+      const raw = parseFloat(document.getElementById('amount').value) || 0;
+      if (raw <= 0) return;
+      const fee = Math.round(raw * FEE_RATE * 100) / 100;
+      const recv = Math.round((raw - fee) * 100) / 100;
+      balance += recv;
+      document.getElementById('bal').textContent = 'PKR ' + balance.toFixed(2);
+      const hist = document.getElementById('history');
+      const row = document.createElement('div');
+      row.className = 'tx';
+      row.innerHTML = '<div><div>Add Money · ' + method + '</div><div class="meta">Fee PKR ' + fee.toFixed(2) + ' · demo</div></div><div class="in">+' + recv.toFixed(2) + '</div>';
+      hist.insertBefore(row, hist.firstChild);
+      document.getElementById('amount').value = '';
+      updateFee();
+      toast('Demo credit · fee-only · zero riba');
+    }
+    function toast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2200);
+    }
+  </script>
 </body>
 </html>
